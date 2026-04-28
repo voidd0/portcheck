@@ -1,0 +1,47 @@
+{
+  "name": "@v0idd0/portcheck",
+  "version": "1.0.0",
+  "description": "portcheck \u2014 fast TCP port scanner with service fingerprints. Single host or CIDR, named-service lookup, JSON or table output. Free forever from v\u00f8iddo.",
+  "main": "src/index.js",
+  "type": "module",
+  "bin": {
+    "portcheck": "./bin/portcheck.js"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "port",
+    "scan",
+    "tcp",
+    "network",
+    "ports",
+    "cli",
+    "devops",
+    "developer-tools",
+    "voiddo"
+  ],
+  "author": "v\u00f8iddo <support@voiddo.com> (https://voiddo.com)",
+  "license": "MIT",
+  "homepage": "https://tools.voiddo.com/portcheck/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voidd0/portcheck.git"
+  },
+  "bugs": {
+    "url": "https://github.com/voidd0/portcheck/issues",
+    "email": "support@voiddo.com"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ]
+}
