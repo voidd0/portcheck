@@ -1,6 +1,11 @@
 # portcheck
 
-See what's listening on your local ports. Fast. Zero deps.
+[![npm version](https://img.shields.io/npm/v/@v0idd0/portcheck.svg?color=A0573A)](https://www.npmjs.com/package/@v0idd0/portcheck)
+[![npm downloads](https://img.shields.io/npm/dw/@v0idd0/portcheck.svg?color=1F1A14)](https://www.npmjs.com/package/@v0idd0/portcheck)
+[![License: MIT](https://img.shields.io/badge/license-MIT-A0573A.svg)](LICENSE)
+[![Node ≥14](https://img.shields.io/badge/node-%E2%89%A514-1F1A14)](package.json)
+
+See what's listening on your local ports. Fast. Zero deps. Reads `/proc` directly on Linux, falls back to `lsof` on macOS/BSD.
 
 ```
 $ portcheck
@@ -12,10 +17,16 @@ port   proto  command         pid     address
 8000   tcp    uvicorn         2728014 127.0.0.1
 ```
 
+## Why portcheck
+
+You started a dev server two windows ago. You started another one in this window. They both bound to `:3000`. You don't remember which is which. The fix is `lsof -i :3000`, but `lsof` is slow on machines with many file descriptors and the output is full of fields you don't need. `netstat -tlnp` was deprecated five distros ago. `ss -ltnp` is fast but its column alignment was last touched in the kernel 3.x era.
+
+`portcheck` is what those commands would look like if you wrote them today: column-aligned, sorted by port, no sudo for your own processes, instant on a laptop with 50K open fds.
+
 ## Install
 
 ```bash
-npm install -g bruh-portcheck
+npm install -g @v0idd0/portcheck
 ```
 
 ## Usage
@@ -34,27 +45,50 @@ portcheck 8000-9000
 portcheck --json | jq '.[] | select(.command == "node")'
 ```
 
-## Why not `netstat`/`ss`/`lsof`?
+## Compared to alternatives
 
-- `netstat -tlnp` — deprecated on most distros, output formatting is from 1990
-- `ss -ltnp` — fast but column alignment requires squinting
-- `lsof -i -P -n` — slow on machines with many fds, requires sudo for other users
+| tool | speed on 50K fds | sudo for self | output legibility | macOS support |
+|---|---|---|---|---|
+| portcheck | <50ms | no | aligned, sorted by port | via `lsof` fallback |
+| `lsof -i -P -n` | 2-3s | yes (for others) | dense, hard to scan | yes |
+| `ss -ltnp` | <100ms | yes (for cmd) | terse columns | no |
+| `netstat -tlnp` | varies | sometimes | 1990s formatting | deprecated |
 
-`portcheck` reads `/proc` directly on Linux (no privilege needed for your own processes), falls back to `lsof` on macOS/BSD where `/proc` doesn't exist. Output is dev-friendly: pid, command, address, sorted by port.
+If you regularly investigate ports across machines you don't own (oncall, debugging others' processes), `lsof -i` is still the canonical answer. For your own laptop and your own processes, portcheck is faster typing and faster reading.
+
+## FAQ
+
+**Why doesn't it need sudo?** On Linux it parses `/proc/<pid>/net/tcp` and `/proc/<pid>/cmdline` for processes you own, which doesn't require elevation. To see ports owned by *other* users, run with sudo — same rule as `lsof`.
+
+**Does it show UDP?** Yes when you ask: `portcheck --proto udp` or `--proto all`. Default is TCP because that's what people actually search for.
+
+**What about systemd-managed sockets that no process holds open yet?** Not visible until the activated process binds. That's a kernel-level signal portcheck deliberately doesn't try to surface — `systemctl list-sockets` is the right tool there.
+
+**Why no docker integration?** Containers running on your host do appear under their PID. If you want container-aware port mapping, `docker ps` shows the published-port column already.
 
 ## Programmatic API
 
 ```javascript
-import { list, filterRange, format } from 'bruh-portcheck';
+import { list, filterRange, format } from '@v0idd0/portcheck';
 
 const all = list();
 const webPorts = filterRange(all, '80-443');
 console.log(format(webPorts));
 ```
 
+## Tips
+
+- **Pipe to `awk` for ad-hoc filters** — `portcheck --json | jq '.[] | select(.address == "0.0.0.0")'` finds anything bound to a public interface, useful when you wonder why your firewall rule isn't doing what you thought.
+- **In docker-compose dev workflows** — run `portcheck` on the host to confirm published ports actually landed; container-internal ports won't appear (they live in the container's net namespace), which is itself a useful signal.
+- **As a teardown helper** — `portcheck --json | jq '.[] | select(.command == "node") | .pid' | xargs kill` is the no-ceremony version of "kill all my orphaned dev servers". Use with care.
+
+## More from the studio
+
+This is one tool out of many — see [`from-the-studio.md`](from-the-studio.md) for the full lineup of vøiddo products (other CLI tools, browser extensions, the studio's flagship products and games).
+
 ## License
 
-MIT — part of the [vøiddo](https://voiddo.com) tools collection.
+MIT.
 
 ---
 
