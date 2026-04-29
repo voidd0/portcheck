@@ -55,3 +55,7 @@ console.log(format(webPorts));
 ## License
 
 MIT — part of the [vøiddo](https://voiddo.com) tools collection.
+
+---
+
+Built by [vøiddo](https://voiddo.com/) — a small studio shipping AI-flavoured products, free dev tools, Chrome extensions and weird browser games.
