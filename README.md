@@ -5,7 +5,13 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-A0573A.svg)](LICENSE)
 [![Node ≥14](https://img.shields.io/badge/node-%E2%89%A514-1F1A14)](package.json)
 
+**[Homepage](https://tools.voiddo.com/portcheck/?ref=portcheck-readme)** · **[Compare with lsof](https://tools.voiddo.com/portcheck/compare/lsof/?ref=portcheck-readme)** · **[GitHub](https://github.com/voidd0/portcheck)** · **[npm](https://www.npmjs.com/package/@v0idd0/portcheck)** · **[All tools](https://tools.voiddo.com/?ref=portcheck-catalog-readme)** · **[Contact](mailto:support@voiddo.com)**
+
+---
+
 See what's listening on your local ports. Fast. Zero deps. Reads `/proc` directly on Linux, falls back to `lsof` on macOS/BSD.
+
+If you are typing `lsof -i :3000` out of habit, start with the compare page: [portcheck vs lsof](https://tools.voiddo.com/portcheck/compare/lsof/?ref=portcheck-readme).
 
 ```
 $ portcheck
@@ -82,9 +88,20 @@ console.log(format(webPorts));
 - **In docker-compose dev workflows** — run `portcheck` on the host to confirm published ports actually landed; container-internal ports won't appear (they live in the container's net namespace), which is itself a useful signal.
 - **As a teardown helper** — `portcheck --json | jq '.[] | select(.command == "node") | .pid' | xargs kill` is the no-ceremony version of "kill all my orphaned dev servers". Use with care.
 
-## More from the studio
+## Compare with lsof
 
-This is one tool out of many — see [`from-the-studio.md`](from-the-studio.md) for the full lineup of vøiddo products (other CLI tools, browser extensions, the studio's flagship products and games).
+`lsof` is the classic Swiss-army answer when you want file-descriptor depth. `portcheck` is the quicker answer when the only question is "what is listening on this port?" The compare page spells out the difference in plain language: [portcheck vs lsof](https://tools.voiddo.com/portcheck/compare/lsof/?ref=portcheck-readme).
+
+## From the same studio
+
+vøiddo builds sharp, free-forever CLIs for debugging production-ish messes without opening a GUI:
+
+- [`@v0idd0/dotdig`](https://tools.voiddo.com/dotdig/?ref=portcheck-related-dotdig-readme) — DNS lookup formatted for humans, not RFC archaeology
+- [`@v0idd0/sslcheck`](https://tools.voiddo.com/sslcheck/?ref=portcheck-related-sslcheck-readme) — inspect TLS cert expiry, SANs, chain depth, and key strength
+- [`@v0idd0/httpwut`](https://tools.voiddo.com/httpwut/?ref=portcheck-related-httpwut-readme) — trace what an HTTP request actually did on the wire
+- [`@v0idd0/timecheck`](https://tools.voiddo.com/timecheck/?ref=portcheck-related-timecheck-readme) — convert and rewrite timestamps without leaving the terminal
+
+Full catalog: [tools.voiddo.com](https://tools.voiddo.com/?ref=portcheck-catalog-readme). Full lineup doc: [`from-the-studio.md`](from-the-studio.md).
 
 ## From the same studio
 

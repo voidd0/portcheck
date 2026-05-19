@@ -1,7 +1,7 @@
 {
   "name": "@v0idd0/portcheck",
-  "version": "1.0.1",
-  "description": "portcheck — fast TCP port scanner with service fingerprints. Single host or CIDR, named-service lookup, JSON or table output. Free forever from vøiddo.",
+  "version": "1.0.2",
+  "description": "portcheck — local port scanner for what is listening on :3000 and beyond. Shows PID, command, user, address, JSON or table output. Compare with lsof, ss, and netstat. Free forever from vøiddo.",
   "main": "src/index.js",
   "type": "module",
   "bin": {
@@ -11,19 +11,39 @@
     "test": "node test.js"
   },
   "keywords": [
+    "portcheck",
+    "local-port-scanner",
     "port",
     "scan",
     "tcp",
+    "udp",
     "network",
+    "network-debugging",
     "ports",
+    "open-ports",
+    "listening-ports",
+    "listening-sockets",
+    "port-3000",
+    "what-is-listening",
+    "kill-port",
+    "lsof-alternative",
+    "ss-alternative",
+    "netstat-alternative",
+    "port-debugger",
+    "socket-inspector",
     "cli",
     "devops",
     "developer-tools",
-    "voiddo"
+    "voiddo",
+    "port-scanner",
+    "network-tool",
+    "fingerprint",
+    "sysadmin",
+    "localhost"
   ],
   "author": "vøiddo <support@voiddo.com> (https://voiddo.com)",
   "license": "MIT",
-  "homepage": "https://tools.voiddo.com/portcheck/",
+  "homepage": "https://tools.voiddo.com/portcheck/?ref=portcheck-npm",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/voidd0/portcheck.git"
@@ -39,10 +59,11 @@
     "node": ">=14"
   },
   "files": [
-    "bin/",
-    "src/",
+    "bin",
+    "src",
+    "README.md",
     "LICENSE",
-    "README.md"
+    "from-the-studio.md"
   ],
   "os": [
     "darwin",
